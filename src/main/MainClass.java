@@ -6,6 +6,7 @@
  */
 package main;
 
+import static java.lang.Thread.sleep;
 import view.View;
 
 import mesurament.Mesurament;
@@ -19,7 +20,7 @@ public class MainClass {
     private View vista;
      // Punter a la Vista del patró
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         //Mesurament.mesura();
         (new MainClass()).MVCInit();
     }
@@ -28,9 +29,17 @@ public class MainClass {
      * Establece los punteros entre las distintas clases del patrón MVC para que
      * se puedan comunicar entre ellas.
      */
-    private void MVCInit() {
+    private void MVCInit() throws InterruptedException {
         vista = new View();
         vista.mostrar();
+        sleep(1200);
+        vista.getPuzzle().cambiaPieza(1, 0);
+        sleep(1200);
+        vista.getPuzzle().cambiaPieza(1, 1);
+        sleep(1200);
+        vista.getPuzzle().cambiaPieza(0, 1);
+        sleep(1200);
+        vista.getPuzzle().cambiaPieza(0, 0);
     }
 
 }

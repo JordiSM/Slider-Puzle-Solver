@@ -39,7 +39,7 @@ public class View extends JFrame{
 
     private LeftLateralPanel leftPanel;
     private RightLateralPanel rightPanel;
-    private GraphPanel graphPanel;
+    private Puzzle puzzle;
 
     // CONSTRUCTORS
     public View() {
@@ -56,8 +56,8 @@ public class View extends JFrame{
      * JFrame.
      */
     public void mostrar() {
-        this.GraphWidth = 800;
-        this.GraphHeight = 700;
+        this.GraphWidth = 600;
+        this.GraphHeight = 500;
 
         // NOT RESIZABLE
         this.setResizable(false);
@@ -73,8 +73,8 @@ public class View extends JFrame{
         getContentPane().setBackground(new Color(212, 191, 142));
         
         // GRAPH PANEL
-        graphPanel = new GraphPanel(this, GraphWidth, GraphHeight);
-        this.add(graphPanel);
+        puzzle = new Puzzle(this, GraphWidth, GraphHeight,4);
+        this.add(puzzle);
 
         // PANELES LATERALES
         leftPanel = new LeftLateralPanel(this);
@@ -128,14 +128,12 @@ public class View extends JFrame{
         return rightPanel;
     }
     
-    public GraphPanel getgraphPanel() {
-        return graphPanel;
+    public Puzzle getPuzzle() {
+        return puzzle;
     }
     
     protected void paintGraphPanel() {
-        this.graphPanel.paint(this.getGraphics());
+        this.puzzle.paint(this.getGraphics());
     }
-
-    
     
 }

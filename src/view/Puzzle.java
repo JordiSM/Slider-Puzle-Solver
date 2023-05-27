@@ -8,7 +8,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,7 +18,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import model.Casilla;
 
 /**
  * Panel para pintar los puntos generados.
@@ -31,7 +29,7 @@ public final class Puzzle extends JPanel {
     private final int height;
     private BufferedImage[][] puzzle;
     private BufferedImage puzzleImage;
-    private int tamPuzzle;
+    private final int tamPuzzle;
     private Random rand;
     private int posXLibre = 0;
     private int posYLibre = 0;
@@ -49,7 +47,7 @@ public final class Puzzle extends JPanel {
         setBounds(vista.MARGENLAT, vista.MARGENVER,
                 width, height);
         setBackground(Color.WHITE);
-        preparaPuzzle("C:\\Users\\jfher\\OneDrive\\Documentos\\GitHub\\Slider-Puzle-Solver\\src\\img\\imagen.jpg");
+        preparaPuzzle("src/img/imagen.jpg");
     }
 
     public void preparaPuzzle(String s) {
@@ -83,6 +81,8 @@ public final class Puzzle extends JPanel {
     }
 
     public void cambiaPieza(int i, int j) {
+        //x = columna (width)
+        //j = fila    (height)
         if ((posXLibre + 1) == i && (posYLibre == j)) {
             BufferedImage pieza = puzzle[posXLibre + 1][posYLibre];
             puzzle[posXLibre][posYLibre] = pieza;
@@ -126,14 +126,13 @@ public final class Puzzle extends JPanel {
         for (int i = 0; i < tamPuzzle; i++) {
             for (int j = 0; j < tamPuzzle; j++) {
                 if ((i != posXLibre) || (j != posYLibre)) {
-                    BufferedImage cuadrilatero = puzzle[i][j];
 
                     // Calcular las coordenadas del cuadrilátero en el JPanel
                     int x = i * (cuadrilateroWidth + 2);
                     int y = j * (cuadrilateroHeight + 2);
 
                     // Dibujar el cuadrilátero en el JPanel
-                    g.drawImage(cuadrilatero, x, y, cuadrilateroWidth, cuadrilateroHeight, null);
+                    g.drawImage(puzzle[i][j], x, y, cuadrilateroWidth, cuadrilateroHeight, null);
                 }
             }
         }

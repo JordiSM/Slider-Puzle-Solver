@@ -83,13 +83,6 @@ public class View extends JFrame{
         rightPanel = new RightLateralPanel(this);
         this.add(rightPanel);
         
-        // TITULO
-        JLabel label = new JLabel("Visualizador de Rutas: Djistra y Comercio");
-        label.setFont(new Font("Britannic Bold", Font.BOLD, 14));
-        label.setHorizontalAlignment(0);
-        label.setBounds(getWidth() / 2 - 200, 10, 400, 30);
-        this.add(label);
-        
         // ÚLTIMOS AJUSTES
         this.setVisible(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

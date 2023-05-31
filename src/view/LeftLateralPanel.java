@@ -7,8 +7,15 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import javax.swing.border.LineBorder;
 
@@ -18,21 +25,23 @@ import javax.swing.border.LineBorder;
 public class LeftLateralPanel extends JPanel {
 
     private final View vista;
-    
+
     private final int x;
     private final int y;
     private final int width;
     private final int height;
-    
-    
+    private JTextField tamPuzzle;
+    private JButton aceptaTam;
+
     /**
      * Panel Lateral izquierdo encargado de la configuración del algoritmo y los
      * datos de la aplicación
+     *
      * @param v JFrame View
      */
     public LeftLateralPanel(View v) {
         this.vista = v;
-        
+
         this.setLayout(null);
         this.x = 10;
         this.y = this.vista.MARGENVER;
@@ -43,6 +52,37 @@ public class LeftLateralPanel extends JPanel {
         this.setBackground(new Color(245, 245, 220));
         this.setBorder(new LineBorder(Color.BLACK, 2));
         
+        Font font = new Font("Arial", Font.BOLD, 16);
+        tamPuzzle = new JTextField();
+        tamPuzzle.setHorizontalAlignment(SwingConstants.CENTER);
+        tamPuzzle.setBounds(10, 50, width - 20, 50);
+        tamPuzzle.setBackground(new Color(135, 116, 89));
+        tamPuzzle.setBorder(new LineBorder(Color.BLACK, 2));
+        tamPuzzle.setFont(font);
+        tamPuzzle.setForeground(Color.WHITE);
+        this.add(tamPuzzle);
+        
+        JLabel label = new JLabel("Tamaño del tablero");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setBounds(10, 0, width - 20, 80);
+        label.setFont(font);
+        label.setForeground(new Color(135, 116, 89));
+        this.add(label);
+        
+        this.aceptaTam = new JButton("OK");
+        this.aceptaTam.setBounds(width / 2 - 10, 104, width / 2, 50);
+        this.aceptaTam.setBackground(new Color(212, 191, 142));
+        this.aceptaTam.setBorder(new LineBorder(Color.BLACK, 2));
+        this.aceptaTam.setFont(font);
+        this.aceptaTam.setForeground(Color.WHITE);
+        this.aceptaTam.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(tamPuzzle.getText());
+            }
+        });
+        this.add(aceptaTam);
+
         this.init();
     }
 
@@ -51,7 +91,7 @@ public class LeftLateralPanel extends JPanel {
      * que lo componen (JLabels, JComboBoxs y otros JPanels)
      */
     private void init() {
-        
+
     }
-    
+
 }

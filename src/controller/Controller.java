@@ -19,6 +19,7 @@ public class Controller implements Runnable {
     // PUNTEROS DEL PATRÓN MVC
     private Model modelo;
     private View vista;
+    private int type = 1;
 
     // CONSTRUCTORS
     public Controller() {
@@ -31,7 +32,6 @@ public class Controller implements Runnable {
 
     @Override
     public void run() {
-        int type = 1;
         switch (type) {
             case 1:
                 Aleatorio();
@@ -108,6 +108,10 @@ public class Controller implements Runnable {
 
     public View getVista() {
         return this.vista;
+    }
+    
+    public void setType(int i){
+        this.type = i;
     }
 
     public void setVista(View vista) {

@@ -56,7 +56,7 @@ public class View extends JFrame{
      * JFrame.
      */
     public void mostrar() {
-        this.GraphWidth = 600;
+        this.GraphWidth = 500;
         this.GraphHeight = 500;
 
         // NOT RESIZABLE
@@ -85,7 +85,7 @@ public class View extends JFrame{
         
         // TITULO
         JLabel label = new JLabel("Visualizador de Rutas: Djistra y Comercio");
-        label.setFont(new Font("Britannic Bold", Font.BOLD, 15));
+        label.setFont(new Font("Britannic Bold", Font.BOLD, 14));
         label.setHorizontalAlignment(0);
         label.setBounds(getWidth() / 2 - 200, 10, 400, 30);
         this.add(label);

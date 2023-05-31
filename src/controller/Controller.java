@@ -6,7 +6,6 @@
  */
 package controller;
 
-
 import model.Model;
 import model.Movement;
 import view.View;
@@ -20,7 +19,6 @@ public class Controller implements Runnable {
     // PUNTEROS DEL PATRÓN MVC
     private Model modelo;
     private View vista;
-   
 
     // CONSTRUCTORS
     public Controller() {
@@ -30,48 +28,56 @@ public class Controller implements Runnable {
         this.modelo = modelo;
         this.vista = vista;
     }
-    
+
     @Override
     public void run() {
         int type = 1;
-        switch(type){
-            case 1 -> Aleatorio();
-            case 2 -> Probabilistico();
-            case 3 -> BranchAndBound();
-            case 4 -> Estrategico();
+        switch (type) {
+            case 1:
+                Aleatorio();
+                break;
+            case 2:
+                Probabilistico();
+                break;
+            case 3:
+                BranchAndBound();
+                break;
+            case 4:
+                Estrategico();
+                break;
         }
         // Algoritmo de resolución
     }
-    
-    public void Aleatorio(){
+
+    public void Aleatorio() {
         //Mientras no Resulto
-            //generar mov aleatorio
-            //cambiar puzzle
-        
+        //generar mov aleatorio
+        //cambiar puzzle
+
         int count = 0;
-        while(!modelo.isSolved()){
+        while (!modelo.isSolved(vista.getPuzzle().getPuzzle())) {
             modelo.move(modelo.getRandomMove());
             count++;
         }
         System.out.println("Solution found in " + count + " moves.");
 
     }
-    
-    public void Probabilistico(){
+
+    public void Probabilistico() {
         //Mientras no Resuelto
-            //generar mov aleatorio
-            //si NO es el inverso al aterior (UP,DOWN) (LEFT,RIGHT)
-                //cambiar puzzle
-                
+        //generar mov aleatorio
+        //si NO es el inverso al aterior (UP,DOWN) (LEFT,RIGHT)
+        //cambiar puzzle
+
         int count = 0;      //TOTAL OF VALID MOVES
         int totalMoves = 0; //TOTAL OF MOVES GENERATED
         Movement movAnterior = Movement.LEFT; //First Movement cant be RIGHT
         Movement mov;
-        
-        while(!modelo.isSolved()){
+
+        while (!modelo.isSolved(vista.getPuzzle().getPuzzle())) {
             mov = modelo.getRandomMove();
             totalMoves++;
-            if(!Movement.isInverse(mov, movAnterior)){
+            if (!Movement.isInverse(mov, movAnterior)) {
                 modelo.move(modelo.getRandomMove());
                 count++;
                 movAnterior = mov;
@@ -79,24 +85,20 @@ public class Controller implements Runnable {
         }
         System.out.println("Solution found in " + count + " moves.");
         System.out.println("    Moves stalved:" + (totalMoves - count));
-        
+
     }
-    
-    public void BranchAndBound(){
+
+    public void BranchAndBound() {
         // DIAPOSITIVAS DE CLASE
     }
-    
-    public void Estrategico(){
-        // ENCONTRADO ONLINE
-    } 
-    
-    
 
+    public void Estrategico() {
+        // ENCONTRADO ONLINE
+    }
 
     // CLASS METHODS
     // SETTERS & GETTERS
-
-    public Model getModelo(Model modelo){
+    public Model getModelo(Model modelo) {
         return this.modelo;
     }
 

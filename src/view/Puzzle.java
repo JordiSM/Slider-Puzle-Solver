@@ -33,6 +33,8 @@ public final class Puzzle extends JPanel {
     private Random rand;
     private int posXLibre = 0;
     private int posYLibre = 0;
+    private int cuadrilateroWidth;
+    private int cuadrilateroHeight;
 
     public Puzzle(View v, int w, int h, int t) {
 
@@ -44,10 +46,10 @@ public final class Puzzle extends JPanel {
         Border borde = new LineBorder(Color.BLACK, 2);
         setBorder(borde);
         setLayout(null);
-        setBounds(vista.MARGENLAT, vista.MARGENVER,
-                width, height);
         setBackground(Color.WHITE);
         preparaPuzzle("src/img/imagen.jpg");
+        setBounds(vista.MARGENLAT, vista.MARGENVER,
+                width, height);
     }
 
     public void preparaPuzzle(String s) {
@@ -57,8 +59,8 @@ public final class Puzzle extends JPanel {
             puzzleImage = ImageIO.read(file);
 
             // Inicializar la matriz de cuadriláteros
-            int cuadrilateroWidth = puzzleImage.getWidth() / tamPuzzle;
-            int cuadrilateroHeight = puzzleImage.getHeight() / tamPuzzle;
+            cuadrilateroWidth = puzzleImage.getWidth() / tamPuzzle;
+            cuadrilateroHeight = puzzleImage.getHeight() / tamPuzzle;
             puzzle = new BufferedImage[tamPuzzle][tamPuzzle];
 
             // Dividir la imagen en cuadriláteros y guardarlos en la matriz puzzle
@@ -80,6 +82,11 @@ public final class Puzzle extends JPanel {
         }
     }
 
+    public void shuffle(BufferedImage[][] p){
+        this.puzzle = p;
+        this.repaint();
+    }
+    
     public void cambiaPieza(int i, int j) {
         //x = columna (width)
         //j = fila    (height)
@@ -104,7 +111,7 @@ public final class Puzzle extends JPanel {
             puzzle[posXLibre - 1][posYLibre] = null;
             posXLibre = i;
         }
-        System.out.println(posXLibre+" - "+posYLibre);
+        System.out.println(posXLibre + " - " + posYLibre);
         repaint();
     }
 
@@ -120,22 +127,26 @@ public final class Puzzle extends JPanel {
         super.paintComponent(g);
 
         // Calcular el tamaño de cada cuadrilátero en el JPanel
-        int cuadrilateroWidth = getWidth() / tamPuzzle;
-        int cuadrilateroHeight = getHeight() / tamPuzzle;
+        int cuadrilateroWidthP = getWidth() / tamPuzzle - 1;
+        int cuadrilateroHeightP = getHeight() / tamPuzzle - 1;
         // Dibujar los cuadriláteros en el JPanel
         for (int i = 0; i < tamPuzzle; i++) {
             for (int j = 0; j < tamPuzzle; j++) {
                 if ((i != posXLibre) || (j != posYLibre)) {
 
                     // Calcular las coordenadas del cuadrilátero en el JPanel
-                    int x = i * (cuadrilateroWidth + 2);
-                    int y = j * (cuadrilateroHeight + 2);
+                    int x = i * (cuadrilateroWidthP + 1) +(tamPuzzle/3);
+                    int y = j * (cuadrilateroHeightP + 1) +(tamPuzzle/3);
 
                     // Dibujar el cuadrilátero en el JPanel
-                    g.drawImage(puzzle[i][j], x, y, cuadrilateroWidth, cuadrilateroHeight, null);
+                    g.drawImage(puzzle[i][j], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
                 }
             }
         }
+    }
+    
+    public BufferedImage[][] getPuzzle(){
+        return this.puzzle;
     }
 
     void reset(String ruta) {

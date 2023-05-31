@@ -7,6 +7,8 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JButton;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,6 +24,7 @@ public class RightLateralPanel extends JPanel {
     private int x, y, width, height;
    
     private TimePanel timePanel;
+    private JButton start;
 
     public RightLateralPanel(View v) {
         this.vista = v;
@@ -37,7 +40,15 @@ public class RightLateralPanel extends JPanel {
 
         this.setBounds(x, y, width, height);
         this.setBackground(new Color(245, 245, 220));
-        this.setBorder(new LineBorder(Color.BLACK, 2));        
+        this.setBorder(new LineBorder(Color.BLACK, 2));   
+        this.start = new JButton("START");
+        this.start.setBounds(10, height - 80, width - 20, 70);
+        this.start.setBackground(new Color(135,116,89));
+        this.start.setBorder(new LineBorder(Color.BLACK, 2)); 
+        Font font = new Font("Arial", Font.BOLD,16);
+        this.start.setFont(font);
+        this.start.setForeground(Color.WHITE);
+        this.add(start);
         
         this.timePanel = new TimePanel(10, + 10 ,width - 20, 80);
         this.add(timePanel);

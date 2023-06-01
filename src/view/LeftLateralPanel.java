@@ -25,7 +25,6 @@ import javax.swing.border.LineBorder;
 public class LeftLateralPanel extends JPanel {
 
     private final View vista;
-
     private final int x;
     private final int y;
     private final int width;
@@ -51,7 +50,7 @@ public class LeftLateralPanel extends JPanel {
         this.setBounds(x, y, width, height);
         this.setBackground(new Color(245, 245, 220));
         this.setBorder(new LineBorder(Color.BLACK, 2));
-        
+
         Font font = new Font("Arial", Font.BOLD, 16);
         tamPuzzle = new JTextField();
         tamPuzzle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -61,14 +60,14 @@ public class LeftLateralPanel extends JPanel {
         tamPuzzle.setFont(font);
         tamPuzzle.setForeground(Color.WHITE);
         this.add(tamPuzzle);
-        
+
         JLabel label = new JLabel("Tamaño del tablero");
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setBounds(10, 0, width - 20, 80);
         label.setFont(font);
         label.setForeground(new Color(135, 116, 89));
         this.add(label);
-        
+
         this.aceptaTam = new JButton("OK");
         this.aceptaTam.setBounds(width / 2 - 10, 104, width / 2, 50);
         this.aceptaTam.setBackground(new Color(212, 191, 142));
@@ -79,6 +78,9 @@ public class LeftLateralPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(tamPuzzle.getText());
+                vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
+                        vista.getGraphHeight(),
+                        Integer.parseInt(tamPuzzle.getText())));
             }
         });
         this.add(aceptaTam);

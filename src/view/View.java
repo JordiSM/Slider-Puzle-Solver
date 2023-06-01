@@ -88,6 +88,13 @@ public class View extends JFrame{
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
+    public void cambiarPuzzle(Puzzle p){
+        this.remove(this.puzzle);
+        this.puzzle = p;
+        this.add(puzzle);
+        this.repaint();
+    }
+    
     // GETTERS & SETTERS
     public Controller getControlador() {
         return controlador;

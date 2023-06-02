@@ -10,13 +10,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import javax.swing.border.LineBorder;
 
 /**
@@ -31,6 +32,7 @@ public class LeftLateralPanel extends JPanel {
     private final int height;
     private JTextField tamPuzzle;
     private JButton aceptaTam;
+    private JButton cambiaImagen;
 
     /**
      * Panel Lateral izquierdo encargado de la configuración del algoritmo y los
@@ -77,13 +79,50 @@ public class LeftLateralPanel extends JPanel {
         this.aceptaTam.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(tamPuzzle.getText());
                 vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
                         vista.getGraphHeight(),
-                        Integer.parseInt(tamPuzzle.getText())));
+                        Integer.parseInt(tamPuzzle.getText()), 
+                        vista.getPuzzle().getImagen()));
             }
         });
         this.add(aceptaTam);
+
+        JLabel label2 = new JLabel("Selección de imagen");
+        label2.setHorizontalAlignment(SwingConstants.CENTER);
+        label2.setBounds(10, 250, width - 20, 80);
+        label2.setFont(font);
+        label2.setForeground(new Color(135, 116, 89));
+        this.add(label2);
+        this.cambiaImagen = new JButton();
+        this.cambiaImagen.setBounds(10, 300, width - 20, 200);
+
+        /* Hago esto por que me da conflictos al usar this dentro del
+        actionListener*/
+        LeftLateralPanel punteroThis = this;
+        this.cambiaImagen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser jf = new JFileChooser();
+                /*Para que no nos permita seleccionar más de un archivo*/
+                jf.setMultiSelectionEnabled(false);
+                if (jf.showOpenDialog(punteroThis) == JFileChooser.APPROVE_OPTION) {
+                    /* Cojo la imagen seleccionada */
+                    File selectedFile = jf.getSelectedFile();
+                    /* Cogemos el path de la imagen */
+                    String filePath = selectedFile.getAbsolutePath();
+                    
+                    vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
+                        vista.getGraphHeight(),
+                        vista.getPuzzle().getTamPuzzle(), 
+                        filePath));
+                }
+            }
+        });
+        ImageIcon iconoImg = new ImageIcon("src/img/image-icon.png");
+        this.cambiaImagen.setIcon(iconoImg);
+        this.cambiaImagen.setBackground(null);
+        this.cambiaImagen.setBorder(null);
+        this.add(this.cambiaImagen);
 
         this.init();
     }

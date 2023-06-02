@@ -35,19 +35,20 @@ public final class Puzzle extends JPanel {
     private int posYLibre = 0;
     private int cuadrilateroWidth;
     private int cuadrilateroHeight;
+    private String imagen;
 
-    public Puzzle(View v, int w, int h, int t) {
+    public Puzzle(View v, int w, int h, int t, String s) {
 
         this.vista = v;
         this.width = w;
         this.height = h;
         this.tamPuzzle = t;
-
+        this.imagen = s;
         Border borde = new LineBorder(Color.BLACK, 2);
         setBorder(borde);
         setLayout(null);
         setBackground(Color.WHITE);
-        preparaPuzzle("src/img/imagen.jpg");
+        preparaPuzzle(imagen);
         setBounds(vista.MARGENLAT, vista.MARGENVER,
                 width, height);
     }
@@ -82,11 +83,11 @@ public final class Puzzle extends JPanel {
         }
     }
 
-    public void shuffle(BufferedImage[][] p){
+    public void shuffle(BufferedImage[][] p) {
         this.puzzle = p;
         this.repaint();
     }
-    
+
     public void cambiaPieza(int i, int j) {
         //x = columna (width)
         //j = fila    (height)
@@ -135,8 +136,8 @@ public final class Puzzle extends JPanel {
                 if ((i != posXLibre) || (j != posYLibre)) {
 
                     // Calcular las coordenadas del cuadrilátero en el JPanel
-                    int x = i * (cuadrilateroWidthP + 1) +(tamPuzzle/3);
-                    int y = j * (cuadrilateroHeightP + 1) +(tamPuzzle/3);
+                    int x = i * (cuadrilateroWidthP + 1) + (tamPuzzle / 3);
+                    int y = j * (cuadrilateroHeightP + 1) + (tamPuzzle / 3);
 
                     // Dibujar el cuadrilátero en el JPanel
                     g.drawImage(puzzle[i][j], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
@@ -144,9 +145,21 @@ public final class Puzzle extends JPanel {
             }
         }
     }
-    
-    public BufferedImage[][] getPuzzle(){
+
+    public BufferedImage[][] getPuzzle() {
         return this.puzzle;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+    
+    public int getTamPuzzle(){
+        return this.tamPuzzle;
     }
 
     void reset(String ruta) {

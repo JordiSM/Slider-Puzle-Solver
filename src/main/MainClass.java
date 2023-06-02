@@ -35,7 +35,7 @@ public class MainClass {
         vista.mostrar();
         sleep(2200);
         Model model = new Model(vista, 4);
-        model.randomize();
+        /*model.randomize();
         sleep(2200);
         vista.getPuzzle().cambiaPieza(1, 0);
         sleep(1200);
@@ -43,7 +43,7 @@ public class MainClass {
         sleep(1200);
         vista.getPuzzle().cambiaPieza(0, 1);
         sleep(1200);
-        vista.getPuzzle().cambiaPieza(0, 0);
+        vista.getPuzzle().cambiaPieza(0, 0);*/
     }
 
 }

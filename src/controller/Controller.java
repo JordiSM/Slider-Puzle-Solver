@@ -6,8 +6,11 @@
  */
 package controller;
 
+import java.util.ArrayList;
+import java.util.PriorityQueue;
 import model.Model;
 import model.Movement;
+import model.NodeBB;
 import view.View;
 
 /**
@@ -46,16 +49,19 @@ public class Controller implements Runnable {
                 Estrategico();
                 break;
         }
+        if (modelo.isSolved()) {
+            this.vista.repaint();
+        }
         // Algoritmo de resolución
     }
 
     public void Aleatorio() {
         //Mientras no Resulto
-        //generar mov aleatorio
-        //cambiar puzzle
-
+        //  generar mov aleatorio
+        //  cambiar puzzle
+        System.out.println("Started aleatorio");
         int count = 0;
-        while (!modelo.isSolved(vista.getPuzzle().getPuzzle())) {
+        while (!modelo.isSolved()) {
             modelo.move(modelo.getRandomMove());
             count++;
         }
@@ -65,20 +71,20 @@ public class Controller implements Runnable {
 
     public void Probabilistico() {
         //Mientras no Resuelto
-        //generar mov aleatorio
-        //si NO es el inverso al aterior (UP,DOWN) (LEFT,RIGHT)
-        //cambiar puzzle
+        //  generar mov aleatorio
+        //  si NO es el inverso al aterior (UP,DOWN) (LEFT,RIGHT)
+        //      cambiar puzzle
 
         int count = 0;      //TOTAL OF VALID MOVES
         int totalMoves = 0; //TOTAL OF MOVES GENERATED
         Movement movAnterior = Movement.LEFT; //First Movement cant be RIGHT
         Movement mov;
 
-        while (!modelo.isSolved(vista.getPuzzle().getPuzzle())) {
+        while (!modelo.isSolved()) {
             mov = modelo.getRandomMove();
             totalMoves++;
             if (!Movement.isInverse(mov, movAnterior)) {
-                modelo.move(modelo.getRandomMove());
+                modelo.move(mov);
                 count++;
                 movAnterior = mov;
             }
@@ -89,7 +95,26 @@ public class Controller implements Runnable {
     }
 
     public void BranchAndBound() {
-        // DIAPOSITIVAS DE CLASE
+        PriorityQueue<NodeBB> queue = new PriorityQueue<>();
+        NodeBB node = new NodeBB();
+        node.setNMov(0);
+        node.setTablero(modelo.getPuzle());
+        node.updateTotal();
+
+        ArrayList<NodeBB> nodeOptions;
+        int iterations = 0;
+
+        while (!node.isSolved()) {
+            nodeOptions = node.generateOptions();
+            for (NodeBB option : nodeOptions) {
+                queue.add(option);
+            }
+            node = queue.poll();
+
+        }
+
+        System.out.println("Solution found in " + node.getnMov() + " moves.");
+
     }
 
     public void Estrategico() {
@@ -109,8 +134,8 @@ public class Controller implements Runnable {
     public View getVista() {
         return this.vista;
     }
-    
-    public void setType(int i){
+
+    public void setType(int i) {
         this.type = i;
     }
 

@@ -10,15 +10,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import javax.swing.border.LineBorder;
 
@@ -29,7 +25,7 @@ public class RightLateralPanel extends JPanel {
 
     private final View vista;
     private int x, y, width, height;
-    private String[] opciones = {"Alteatorio", "Probabilistico", "BranchAndBound", "Estratégico"};
+    private String[] opciones = {"Aleatorio", "Probabilistico", "BranchAndBound", "Estratégico"};
     private TimePanel timePanel;
     private JButton start;
     private JComboBox<String> menuDesplegable;
@@ -60,22 +56,19 @@ public class RightLateralPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String s = (String) menuDesplegable.getSelectedItem();
+                System.out.println(s);
                 switch (s) {
                     case "Aleatorio":
-                        vista.getControlador().setType(1);
-                        vista.getControlador().run();
+                        vista.newControlador(1);
                         break;
                     case "Probabilistico":
-                        vista.getControlador().setType(2);
-                        vista.getControlador().run();
+                        vista.newControlador(2);
                         break;
                     case "BranchAndBound":
-                        vista.getControlador().setType(3);
-                        vista.getControlador().run();
+                        vista.newControlador(3);
                         break;
                     case "Estratégico":
-                        vista.getControlador().setType(4);
-                        vista.getControlador().run();
+                        vista.newControlador(4);
                         break;
                 }
             }

@@ -6,14 +6,10 @@
  */
 package model;
 
-import java.util.List;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
+import static model.Movement.*;
 import view.View;
 
 /**
@@ -25,7 +21,7 @@ public class Model {
     // PUNTEROS DEL PATRÓN MVC
     private View vista;
     private ArrayList<Object> solution; //Lista ordenada de movimientos
-    private BufferedImage[][] puzzle;
+    private int[][] puzzle;
     private int tamañoTablero;
     private Point blank;
 
@@ -33,105 +29,81 @@ public class Model {
     public Model(View vista, int n) {
         this.vista = vista;
         this.tamañoTablero = n;
-        this.puzzle = vista.getPuzzle().getPuzzle();
-        //this.puzzle = newTablero(n);
+        this.puzzle = newTablero(n);
+        this.randomize();
     }
 
     public Model(View vista) {
         this.vista = vista;
         this.tamañoTablero = 3;
-        this.puzzle = vista.getPuzzle().getPuzzle();
-        //this.puzzle = newTablero(3);
+        this.puzzle = newTablero(3);
 
     }
 
     // CLASS METHODS
-    /*private int[][] newTablero(int n) {
+    private int[][] newTablero(int n) {
         int[][] tablero = new int[n][n];
         int index = 0;
 
-        for (int fila[] : tablero) {
-            for (int columna : fila) {
-                columna = index++;
+        for (int i = 0; i < this.tamañoTablero; i++) {
+            for (int j = 0; j < this.tamañoTablero; j++) {
+                tablero[i][j] = index++;
             }
         }
+
         tablero[n - 1][n - 1] = -1;
         return tablero;
-    }*/
+    }
 
- /* public void randomize() throws Exception {
+    public void randomize() {
+        this.printPuzzle();
+
         Random rnd = new Random();
+        System.out.println("Tamaño Tablero = " + tamañoTablero);
         for (int i = 0; i < this.tamañoTablero; i++) {
             for (int j = 0; j < this.tamañoTablero; j++) {
 
                 int randomIndex = rnd.nextInt(this.tamañoTablero * this.tamañoTablero);
-
+                System.out.println(randomIndex);
                 int fila = randomIndex / tamañoTablero;
                 int columna = randomIndex % tamañoTablero;
 
                 //SWAP
-                BufferedImage temp = this.puzzle[fila][columna];
+                int temp = this.puzzle[fila][columna];
                 this.puzzle[fila][columna] = this.puzzle[i][j];
                 this.puzzle[i][j] = temp;
             }
         }
 
         this.blank = findBlank();
-    }*/
-    public void randomize() throws Exception {
-        Random rnd = new Random();
-        BufferedImage[][] puzzleShuf = new BufferedImage[this.tamañoTablero][this.tamañoTablero];
-        for (int i = 0; i < this.tamañoTablero; i++) {
-            for (int j = 0; j < this.tamañoTablero; j++) {
 
-                int randomIndex = rnd.nextInt(this.tamañoTablero * this.tamañoTablero);
-
-                int fila = randomIndex / tamañoTablero;
-                int columna = randomIndex % tamañoTablero;
-
-                //SWAP
-                BufferedImage temp = this.puzzle[fila][columna];
-                puzzleShuf[fila][columna] = this.puzzle[i][j];
-                puzzleShuf[i][j] = temp;
-            }
-        }
-        this.vista.getPuzzle().shuffle(puzzleShuf);
-        //this.blank = findBlank();
+        this.printPuzzle();
     }
 
-    /* public boolean isSolved() {
+    public boolean isSolved() {
+        int index = 0;
         for (int i = 0; i < this.tamañoTablero; i++) {
             for (int j = 0; j < this.tamañoTablero; j++) {
-                if (this.puzzle[i][j] != (j + i * tamañoTablero)) {
-                    if (i != tamañoTablero - 1 && j != tamañoTablero - 1) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }*/
-    public boolean isSolved(BufferedImage[][] puzzleSol) {
-        for (int i = 0; i < this.tamañoTablero; i++) {
-            for (int j = 0; j < this.tamañoTablero; j++) {
-                if (this.puzzle[i][j] != puzzleSol[i][j]) {
+
+                if (this.puzzle[i][j] != index & !(i == tamañoTablero - 1 & j == tamañoTablero - 1)) {
                     return false;
                 }
+
+                index++;
             }
         }
         return true;
     }
 
-    private Point findBlank() throws Exception {
+    private Point findBlank() {
         for (int i = 0; i < this.tamañoTablero; i++) {
             for (int j = 0; j < this.tamañoTablero; j++) {
-                if (this.puzzle[i][j] == null) {
+                if (this.puzzle[i][j] == -1) {
                     return new Point(i, j);
                 }
             }
         }
-        //ERROR
-        throw (new RuntimeException("Error calling findBlank(): Blank not found"));
+        return null;
     }
 
     public Movement getRandomMove() {
@@ -183,7 +155,7 @@ public class Model {
                 throw new RuntimeException("Error: Movement '" + move.name() + "' not found");
         }
         // SWAP
-        BufferedImage temp = puzzle[blank.x + moveX][blank.y + moveY];
+        int temp = puzzle[blank.x + moveX][blank.y + moveY];
         puzzle[blank.x + moveX][blank.y + moveY] = this.puzzle[blank.x][blank.y];
         puzzle[blank.x][blank.y] = temp;
 
@@ -192,9 +164,43 @@ public class Model {
         blank.y += moveY;
     }
 
+    public static int[][] move(Movement move, int[][] tablero, Point blank) {
+        int moveX, moveY;
+        switch (move) {
+            case UP:
+                moveX = -1;
+                moveY = 0;
+                break;
+            case LEFT:
+                moveX = 0;
+                moveY = -1;
+                break;
+            case DOWN:
+                moveX = 1;
+                moveY = 0;
+                break;
+            case RIGHT:
+                moveX = 0;
+                moveY = 1;
+                break;
+            default:
+                throw new RuntimeException("Error: Movement '" + move.name() + "' not found");
+        }
+        // SWAP
+        int temp = tablero[blank.x + moveX][blank.y + moveY];
+        tablero[blank.x + moveX][blank.y + moveY] = tablero[blank.x][blank.y];
+        tablero[blank.x][blank.y] = temp;
+
+        // Actualizamos la posición de blank
+        blank.x += moveX;
+        blank.y += moveY;
+
+        return tablero;
+    }
+
     public void reset(int n) {
         this.tamañoTablero = n;
-        this.puzzle = vista.getPuzzle().getPuzzle();
+        this.puzzle = this.newTablero(n);
     }
 
     // GETTERS & SETTERS
@@ -206,16 +212,25 @@ public class Model {
         this.vista = vista;
     }
 
-    public void setPuzzle(BufferedImage[][] p) {
-        this.puzzle = p;
-    }
-
-    public BufferedImage[][] getPuzle() {
+    public int[][] getPuzle() {
         return this.puzzle;
     }
 
     public int getN() {
         return this.tamañoTablero;
+    }
+
+    public String printPuzzle() {
+        String s = "";
+        for (int i = 0; i < this.tamañoTablero; i++) {
+            s += "\n";
+
+            for (int j = 0; j < this.tamañoTablero; j++) {
+                s += "\t" + this.puzzle[i][j];
+            }
+        }
+        System.out.println(s);
+        return s;
     }
 
 }

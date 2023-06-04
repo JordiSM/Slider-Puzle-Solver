@@ -81,7 +81,7 @@ public class LeftLateralPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
                         vista.getGraphHeight(),
-                        Integer.parseInt(tamPuzzle.getText()), 
+                        Integer.parseInt(tamPuzzle.getText()),
                         vista.getPuzzle().getImagen()));
             }
         });
@@ -110,11 +110,11 @@ public class LeftLateralPanel extends JPanel {
                     File selectedFile = jf.getSelectedFile();
                     /* Cogemos el path de la imagen */
                     String filePath = selectedFile.getAbsolutePath();
-                    
+
                     vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
-                        vista.getGraphHeight(),
-                        vista.getPuzzle().getTamPuzzle(), 
-                        filePath));
+                            vista.getGraphHeight(),
+                            vista.getPuzzle().getTamPuzzle(),
+                            filePath));
                 }
             }
         });

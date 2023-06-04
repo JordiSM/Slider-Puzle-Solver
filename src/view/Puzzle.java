@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import model.Model;
 
 /**
  * Panel para pintar los puntos generados.
@@ -30,12 +31,10 @@ public final class Puzzle extends JPanel {
     private BufferedImage[][] puzzle;
     private BufferedImage puzzleImage;
     private final int tamPuzzle;
-    private Random rand;
-    private int posXLibre = 0;
-    private int posYLibre = 0;
     private int cuadrilateroWidth;
     private int cuadrilateroHeight;
     private String imagen;
+    private Model model;
 
     public Puzzle(View v, int w, int h, int t, String s) {
 
@@ -81,39 +80,8 @@ public final class Puzzle extends JPanel {
         } catch (IOException e) {
             System.out.println("No se encontró el archivo " + s);
         }
-    }
+        this.model = new Model(this.vista, tamPuzzle);
 
-    public void shuffle(BufferedImage[][] p) {
-        this.puzzle = p;
-        this.repaint();
-    }
-
-    public void cambiaPieza(int i, int j) {
-        //x = columna (width)
-        //j = fila    (height)
-        if ((posXLibre + 1) == i && (posYLibre == j)) {
-            BufferedImage pieza = puzzle[posXLibre + 1][posYLibre];
-            puzzle[posXLibre][posYLibre] = pieza;
-            puzzle[posXLibre + 1][posYLibre] = null;
-            posXLibre = i;
-        } else if (posXLibre == i && (posYLibre + 1) == j) {
-            BufferedImage pieza = puzzle[posXLibre][posYLibre + 1];
-            puzzle[posXLibre][posYLibre] = pieza;
-            puzzle[posXLibre][posYLibre + 1] = null;
-            posYLibre = j;
-        } else if (posXLibre == i && (posYLibre - 1) == j) {
-            BufferedImage pieza = puzzle[posXLibre][posYLibre - 1];
-            puzzle[posXLibre][posYLibre] = pieza;
-            puzzle[posXLibre][posYLibre - 1] = null;
-            posYLibre = j;
-        } else if ((posXLibre - 1) == i && (posYLibre == j)) {
-            BufferedImage pieza = puzzle[posXLibre - 1][posYLibre];
-            puzzle[posXLibre][posYLibre] = pieza;
-            puzzle[posXLibre - 1][posYLibre] = null;
-            posXLibre = i;
-        }
-        System.out.println(posXLibre + " - " + posYLibre);
-        repaint();
     }
 
     @Override
@@ -127,27 +95,29 @@ public final class Puzzle extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        int[][] tablero = this.model.getPuzle();
+
         // Calcular el tamaño de cada cuadrilátero en el JPanel
         int cuadrilateroWidthP = getWidth() / tamPuzzle - 1;
         int cuadrilateroHeightP = getHeight() / tamPuzzle - 1;
         // Dibujar los cuadriláteros en el JPanel
         for (int i = 0; i < tamPuzzle; i++) {
             for (int j = 0; j < tamPuzzle; j++) {
-                if ((i != posXLibre) || (j != posYLibre)) {
 
-                    // Calcular las coordenadas del cuadrilátero en el JPanel
-                    int x = i * (cuadrilateroWidthP + 1) + (tamPuzzle / 3);
-                    int y = j * (cuadrilateroHeightP + 1) + (tamPuzzle / 3);
+                // Calcular las coordenadas del cuadrilátero en el JPanel
+                int x = i * (cuadrilateroWidthP + 1) + (tamPuzzle / 3);
+                int y = j * (cuadrilateroHeightP + 1) + (tamPuzzle / 3);
 
-                    // Dibujar el cuadrilátero en el JPanel
-                    g.drawImage(puzzle[i][j], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
+                // Dibujar el cuadrilátero en el JPanel
+                int indice = tablero[i][j];
+
+                if (indice != -1) {
+                    int fila = indice / tamPuzzle;
+                    int columna = indice % tamPuzzle;
+                    g.drawImage(puzzle[fila][columna], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
                 }
             }
         }
-    }
-
-    public BufferedImage[][] getPuzzle() {
-        return this.puzzle;
     }
 
     public String getImagen() {
@@ -157,13 +127,17 @@ public final class Puzzle extends JPanel {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
-    
-    public int getTamPuzzle(){
+
+    public int getTamPuzzle() {
         return this.tamPuzzle;
     }
 
-    void reset(String ruta) {
+    public Model getModelo() {
+        return this.model;
+    }
 
+    void reset(String ruta) {
+        this.preparaPuzzle(ruta);
     }
 
 }

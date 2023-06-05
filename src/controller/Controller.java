@@ -7,6 +7,8 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import model.Model;
 import model.Movement;
@@ -74,7 +76,7 @@ public class Controller implements Runnable {
         //  generar mov aleatorio
         //  si NO es el inverso al aterior (UP,DOWN) (LEFT,RIGHT)
         //      cambiar puzzle
-
+        System.out.println("Started probabilistico");
         int count = 0;      //TOTAL OF VALID MOVES
         int totalMoves = 0; //TOTAL OF MOVES GENERATED
         Movement movAnterior = Movement.LEFT; //First Movement cant be RIGHT
@@ -95,23 +97,38 @@ public class Controller implements Runnable {
     }
 
     public void BranchAndBound() {
+        System.out.println("Started B&B");
+
         PriorityQueue<NodeBB> queue = new PriorityQueue<>();
+        HashMap<String,NodeBB> map = new HashMap();
+        
+        ArrayList<NodeBB> nodeOptions;
         NodeBB node = new NodeBB();
         node.setNMov(0);
         node.setTablero(modelo.getPuzle());
         node.updateTotal();
-
-        ArrayList<NodeBB> nodeOptions;
-        int iterations = 0;
+        
+        map.put(node.getKey(), node);
+        
 
         while (!node.isSolved()) {
+                
             nodeOptions = node.generateOptions();
+            
             for (NodeBB option : nodeOptions) {
-                queue.add(option);
-            }
+                if(!map.containsKey(option.getKey())){
+                    //System.out.println(option.getGood() + " - " + option.getPoints());
+                    //System.out.println(map.size());
+                    map.put(option.getKey(), option);
+                    option.updateTotal();
+                    queue.add(option);
+                    
+                } 
+            }   
+            
             node = queue.poll();
-
         }
+        modelo.setTablero(node.getTablero());
 
         System.out.println("Solution found in " + node.getnMov() + " moves.");
 

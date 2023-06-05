@@ -164,40 +164,6 @@ public class Model {
         blank.y += moveY;
     }
 
-    public static int[][] move(Movement move, int[][] tablero, Point blank) {
-        int moveX, moveY;
-        switch (move) {
-            case UP:
-                moveX = -1;
-                moveY = 0;
-                break;
-            case LEFT:
-                moveX = 0;
-                moveY = -1;
-                break;
-            case DOWN:
-                moveX = 1;
-                moveY = 0;
-                break;
-            case RIGHT:
-                moveX = 0;
-                moveY = 1;
-                break;
-            default:
-                throw new RuntimeException("Error: Movement '" + move.name() + "' not found");
-        }
-        // SWAP
-        int temp = tablero[blank.x + moveX][blank.y + moveY];
-        tablero[blank.x + moveX][blank.y + moveY] = tablero[blank.x][blank.y];
-        tablero[blank.x][blank.y] = temp;
-
-        // Actualizamos la posición de blank
-        blank.x += moveX;
-        blank.y += moveY;
-
-        return tablero;
-    }
-
     public void reset(int n) {
         this.tamañoTablero = n;
         this.puzzle = this.newTablero(n);
@@ -231,6 +197,10 @@ public class Model {
         }
         System.out.println(s);
         return s;
+    }
+
+    public void setTablero(int[][] tablero) {
+        this.puzzle = tablero;
     }
 
 }

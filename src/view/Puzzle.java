@@ -80,7 +80,7 @@ public final class Puzzle extends JPanel {
         } catch (IOException e) {
             System.out.println("No se encontró el archivo " + s);
         }
-        this.model = new Model(this.vista, tamPuzzle);
+        this.model = new Model(this.vista, this.tamPuzzle);
 
     }
 

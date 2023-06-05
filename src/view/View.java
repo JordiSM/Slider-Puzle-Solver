@@ -67,7 +67,7 @@ public class View extends JFrame {
         getContentPane().setBackground(new Color(212, 191, 142));
 
         // GRAPH PANEL
-        puzzle = new Puzzle(this, GraphWidth, GraphHeight, 4, "src/img/imagen.jpg");
+        puzzle = new Puzzle(this, GraphWidth, GraphHeight, 3,  "src/img/imagen.jpg");
         this.add(puzzle);
 
         // PANELES LATERALES

@@ -8,7 +8,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import model.Model;
 import model.Movement;
@@ -108,21 +108,42 @@ public class Controller implements Runnable {
         node.setTablero(modelo.getPuzle());
         node.updateTotal();
         
-        map.put(node.getKey(), node);
+        //map.put(node.getKey(), node);
         
+        System.out.println("Nodo Inicial: " + node.getGood() + " ; " + node.getPoints());
 
+        int limpiezas = 0;
         while (!node.isSolved()) {
+            
+            
+            if(queue.size() > 100000){
+               List<NodeBB> listaElementos = new ArrayList<>(queue);
+               listaElementos.subList(25000, 100000).clear();
+               queue.clear();
+               queue.addAll(listaElementos);
+               System.out.println("Limpieza " + ++limpiezas + " - Node: " + node.getGood() + " ; " + node.getPoints());
+               
+               this.modelo.setTablero(node.getTablero());
+               this.vista.getPuzzle().repaint();
+               
+               if(limpiezas > 100) return;
                 
+            }
+            
+            if(map.containsKey(node.getKey())){
+                 node = queue.poll();
+                 continue;
+            }
+            
+            map.put(node.getKey(), node);
             nodeOptions = node.generateOptions();
             
             for (NodeBB option : nodeOptions) {
                 if(!map.containsKey(option.getKey())){
                     //System.out.println(option.getGood() + " - " + option.getPoints());
                     //System.out.println(map.size());
-                    map.put(option.getKey(), option);
-                    option.updateTotal();
+                    //map.put(option.getKey(), option);
                     queue.add(option);
-                    
                 } 
             }   
             

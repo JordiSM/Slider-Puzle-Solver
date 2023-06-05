@@ -45,11 +45,29 @@ public class NodeBB implements Comparable<NodeBB> {
 
     public int updateTotal() {
         
-        return updateTotalv1();
+        //return updateTotalv1();
         //return updateTotalv2();
+        return updateTotalv3();
     }
-
+    
     public int updateTotalv1(){
+        total = nMov;
+        good = 0;
+        int index = 0;
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero.length; j++) {
+                if (tablero[i][j] != index) {
+                    total += 100000;
+                } else {
+                    good++;
+                }
+                index++;
+            }
+        }
+        return total;
+    }
+    
+     public int updateTotalv2(){
         total = nMov;
         good = 0;
         int index = 0;
@@ -71,15 +89,21 @@ public class NodeBB implements Comparable<NodeBB> {
         }
         return total;
     }
-    
-    public int updateTotalv2(){
-        total = nMov;
+     
+    public int updateTotalv3(){
+        total = 0;
         good = 0;
         int index = 0;
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero.length; j++) {
                 if (tablero[i][j] != index) {
-                    total += 100000;
+                    int fila = tablero[i][j]/tablero.length;
+                    int columna = tablero[i][j]%tablero.length;
+                    
+                    int x = fila - i;
+                    int y = columna - j;
+                    
+                    total += Math.sqrt(x*x + y*y) * (((tablero.length - i) + (tablero.length - j)) * 20000);
                 } else {
                     good++;
                 }

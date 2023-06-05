@@ -135,7 +135,13 @@ public class Controller implements Runnable {
     }
 
     public void Estrategico() {
-        // ENCONTRADO ONLINE
+        int[][] tablero = modelo.getPuzle();
+        int tamPuzle = tablero.length;
+        
+        int rowsToSolve = tamPuzle - 3;
+        
+        
+
     }
 
     // CLASS METHODS

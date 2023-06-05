@@ -56,26 +56,20 @@ public class Model {
     }
 
     public void randomize() {
+        this.blank = this.findBlank();
         this.printPuzzle();
 
         Random rnd = new Random();
         System.out.println("Tamaño Tablero = " + tamañoTablero);
-        for (int i = 0; i < this.tamañoTablero; i++) {
-            for (int j = 0; j < this.tamañoTablero; j++) {
-
-                int randomIndex = rnd.nextInt(this.tamañoTablero * this.tamañoTablero);
-                System.out.println(randomIndex);
-                int fila = randomIndex / tamañoTablero;
-                int columna = randomIndex % tamañoTablero;
-
-                //SWAP
-                int temp = this.puzzle[fila][columna];
-                this.puzzle[fila][columna] = this.puzzle[i][j];
-                this.puzzle[i][j] = temp;
-            }
+        Movement moveBefore = Movement.UP;
+        for(int i = 0; i < 10000; ){
+            Movement move = this.getRandomMove();
+            if(this.isValidMove(move) & !Movement.isInverse(move, moveBefore)){
+                this.move(move);
+                moveBefore = move;
+                i++;
+            }            
         }
-
-        this.blank = findBlank();
 
         this.printPuzzle();
     }

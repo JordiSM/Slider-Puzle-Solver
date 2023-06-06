@@ -10,10 +10,13 @@ import model.Model;
 import controller.Controller;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -38,6 +41,9 @@ public class View extends JFrame {
     private LeftLateralPanel leftPanel;
     private RightLateralPanel rightPanel;
     private Puzzle puzzle;
+
+    //Titulo
+    private JLabel titulo;
 
     // CONSTRUCTORS
     public View() {
@@ -67,7 +73,7 @@ public class View extends JFrame {
         getContentPane().setBackground(new Color(212, 191, 142));
 
         // GRAPH PANEL
-        puzzle = new Puzzle(this, GraphWidth, GraphHeight, 3,  "src/img/imagen.jpg");
+        puzzle = new Puzzle(this, GraphWidth, GraphHeight, 3, "src/img/imagen.jpg");
         this.add(puzzle);
 
         // PANELES LATERALES
@@ -76,6 +82,15 @@ public class View extends JFrame {
 
         rightPanel = new RightLateralPanel(this);
         this.add(rightPanel);
+
+        // TITULO
+        titulo = new JLabel("Slider Puzzle Solver");
+        titulo.setBounds(10, 10, GraphWidth + (2 * MARGENLAT), 30);
+        Font font = new Font("Arial", Font.BOLD, 26);
+        titulo.setFont(font);
+        titulo.setHorizontalAlignment(SwingConstants.CENTER);
+        titulo.setForeground(new Color(85, 66, 39));
+        this.add(titulo);
 
         // ÚLTIMOS AJUSTES
         this.setVisible(true);

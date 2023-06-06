@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import javax.swing.border.LineBorder;
 
@@ -27,8 +28,11 @@ public class RightLateralPanel extends JPanel {
     private int x, y, width, height;
     private String[] opciones = {"Aleatorio", "Probabilistico", "BranchAndBound", "Estratégico"};
     private TimePanel timePanel;
+    private TimePanel movimientos;
     private JButton start;
     private JComboBox<String> menuDesplegable;
+    private JLabel tiempoLab;
+    private JLabel movLab;
 
     public RightLateralPanel(View v) {
         this.vista = v;
@@ -83,11 +87,34 @@ public class RightLateralPanel extends JPanel {
         menuDesplegable.setForeground(Color.WHITE);
         this.add(menuDesplegable);
 
-        this.timePanel = new TimePanel(10, +10, width - 20, 80);
+        this.timePanel = new TimePanel(10, 40, width - 20, 60);
+        this.tiempoLab = new JLabel("Tiempo de ejecución (ns)");
+        this.tiempoLab.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tiempoLab.setFont(font);
+        this.tiempoLab.setForeground(new Color(135, 116, 89));
+        this.tiempoLab.setBounds(10, 20, width - 20, 20);
+        this.add(this.tiempoLab);
         this.add(timePanel);
+
+        this.movimientos = new TimePanel(10, 160, width - 20, 60);
+        this.movLab = new JLabel("Número de movimientos");
+        this.movLab.setHorizontalAlignment(SwingConstants.CENTER);
+        this.movLab.setFont(font);
+        this.movLab.setForeground(new Color(135, 116, 89));
+        this.movLab.setBounds(10, 140, width - 20, 20);
+        this.add(this.movLab);
+        this.add(movimientos);
 
         this.setVisible(true);
 
+    }
+
+    public void setTimetimePanel(long nanoseconds) {
+        this.timePanel.setTime(nanoseconds);
+    }
+
+    public void setMovimientos(long it) {
+        this.movimientos.setTime(it);
     }
 
     private class TimePanel extends JPanel {
@@ -99,6 +126,7 @@ public class RightLateralPanel extends JPanel {
             this.setBorder(new LineBorder(Color.BLACK, 2));
 
             this.timeLabel = new JLabel("");
+            this.timeLabel.setBounds(x, y, width, height);
             this.add(timeLabel);
         }
 
@@ -108,6 +136,8 @@ public class RightLateralPanel extends JPanel {
 
         public void setTime(long nanoseconds) {
             this.timeLabel.setText(String.valueOf(nanoseconds));
+            this.timeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            this.timeLabel.setForeground(new Color(85, 66, 39));
         }
     }
 

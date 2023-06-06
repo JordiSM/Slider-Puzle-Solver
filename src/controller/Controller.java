@@ -58,6 +58,7 @@ public class Controller implements Runnable {
     }
 
     public void Aleatorio() {
+        long tiempoI = System.nanoTime();
         //Mientras no Resulto
         //  generar mov aleatorio
         //  cambiar puzzle
@@ -68,10 +69,12 @@ public class Controller implements Runnable {
             count++;
         }
         System.out.println("Solution found in " + count + " moves.");
-
+        this.vista.getrightPanel().setTimetimePanel(System.nanoTime() - tiempoI);
+        this.vista.getrightPanel().setMovimientos(count);
     }
 
     public void Probabilistico() {
+        long tiempoI = System.nanoTime();
         //Mientras no Resuelto
         //  generar mov aleatorio
         //  si NO es el inverso al aterior (UP,DOWN) (LEFT,RIGHT)
@@ -93,10 +96,12 @@ public class Controller implements Runnable {
         }
         System.out.println("Solution found in " + count + " moves.");
         System.out.println("    Moves stalved:" + (totalMoves - count));
-
+        this.vista.getrightPanel().setTimetimePanel(System.nanoTime() - tiempoI);
+        this.vista.getrightPanel().setMovimientos(count);
     }
 
     public void BranchAndBound() {
+        long tiempoI = System.nanoTime();
         System.out.println("Started B&B");
 
         PriorityQueue<NodeBB> queue = new PriorityQueue<>();
@@ -152,17 +157,23 @@ public class Controller implements Runnable {
         modelo.setTablero(node.getTablero());
 
         System.out.println("Solution found in " + node.getnMov() + " moves.");
+        this.vista.getrightPanel().setTimetimePanel(System.nanoTime() - tiempoI);
+        this.vista.getrightPanel().setMovimientos(node.getnMov());
 
     }
 
     public void Estrategico() {
+        long tiempoI = System.nanoTime();
         int[][] tablero = modelo.getPuzle();
         int tamPuzle = tablero.length;
         
         int rowsToSolve = tamPuzle - 3;
         
         
-
+        /*
+        this.vista.getrightPanel().setTimetimePanel(System.nanoTime() - tiempoI);
+        this.vista.getrightPanel().setMovimientos(count);
+        */
     }
 
     // CLASS METHODS

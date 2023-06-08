@@ -89,12 +89,12 @@ public class LeftLateralPanel extends JPanel {
 
         JLabel label2 = new JLabel("Selección de imagen");
         label2.setHorizontalAlignment(SwingConstants.CENTER);
-        label2.setBounds(10, 250, width - 20, 80);
+        label2.setBounds(10, 240, width - 20, 80);
         label2.setFont(font);
         label2.setForeground(new Color(135, 116, 89));
         this.add(label2);
         this.cambiaImagen = new JButton();
-        this.cambiaImagen.setBounds(10, 300, width - 20, 200);
+        this.cambiaImagen.setBounds(10, 290, width - 20, 200);
 
         /* Hago esto por que me da conflictos al usar this dentro del
         actionListener*/

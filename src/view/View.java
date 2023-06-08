@@ -64,7 +64,7 @@ public class View extends JFrame {
         this.setLayout(null);
 
         // DIMENSION DEL JFRAME
-        setSize(this.GraphWidth + this.MARGENLAT * 2, this.GraphHeight + this.MARGENVER * 3);
+        setSize(this.GraphWidth + this.MARGENLAT * 2, this.GraphHeight + this.MARGENVER * 2 -10);
 
         // POSICIONAR EL JFRAME EN EL CENTRO DE LA PANTALLA
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

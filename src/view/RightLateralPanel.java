@@ -50,7 +50,7 @@ public class RightLateralPanel extends JPanel {
         this.setBackground(new Color(245, 245, 220));
         this.setBorder(new LineBorder(Color.BLACK, 2));
         this.start = new JButton("START");
-        this.start.setBounds(10, height - 130, width - 20, 70);
+        this.start.setBounds(10, height - 90, width - 20, 70);
         this.start.setBackground(new Color(135, 116, 89));
         this.start.setBorder(new LineBorder(Color.BLACK, 2));
         Font font = new Font("Arial", Font.BOLD, 16);
@@ -80,7 +80,7 @@ public class RightLateralPanel extends JPanel {
         this.add(start);
 
         menuDesplegable = new JComboBox<>(opciones);
-        menuDesplegable.setBounds(10, height - 280, width - 20, 70);
+        menuDesplegable.setBounds(10, height - 190, width - 20, 70);
         menuDesplegable.setBackground(new Color(135, 116, 89));
         menuDesplegable.setBorder(new LineBorder(Color.BLACK, 2));
         menuDesplegable.setFont(font);

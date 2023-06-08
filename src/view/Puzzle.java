@@ -8,11 +8,11 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import javax.imageio.ImageIO;
 
 import javax.swing.JPanel;
@@ -93,8 +93,14 @@ public final class Puzzle extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        //super.paintComponent(g);
 
+        BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = (Graphics2D) img.getGraphics();
+        
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, getWidth(), getHeight());
+        
         int[][] tablero = this.model.getPuzle();
 
         // Calcular el tamaño de cada cuadrilátero en el JPanel
@@ -114,10 +120,12 @@ public final class Puzzle extends JPanel {
                 if (indice != -1) {
                     int fila = indice / tamPuzzle;
                     int columna = indice % tamPuzzle;
-                    g.drawImage(puzzle[fila][columna], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
+                    g2d.drawImage(puzzle[fila][columna], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
                 }
             }
         }
+        
+        g.drawImage(img, 0, 0, this);
     }
 
     public String getImagen() {

@@ -119,7 +119,9 @@ public class Controller implements Runnable {
 
         int limpiezas = 0;
         while (!node.isSolved()) {
-            
+            if(this.modelo.getN() < 7){
+                this.modelo.setTablero(node.getTablero());
+                this.vista.getPuzzle().repaint();            }
             
             if(queue.size() > 100000){
                List<NodeBB> listaElementos = new ArrayList<>(queue);

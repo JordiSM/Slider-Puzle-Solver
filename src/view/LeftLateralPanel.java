@@ -31,8 +31,8 @@ public class LeftLateralPanel extends JPanel {
     private final int width;
     private final int height;
     private JTextField tamPuzzle;
-    private JButton aceptaTam;
-    private JButton cambiaImagen;
+    private final JButton aceptaTam;
+    private final JButton cambiaImagen;
 
     /**
      * Panel Lateral izquierdo encargado de la configuración del algoritmo y los
@@ -103,6 +103,8 @@ public class LeftLateralPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser jf = new JFileChooser();
+                jf.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                jf.setCurrentDirectory(new File("src/img/"));
                 /*Para que no nos permita seleccionar más de un archivo*/
                 jf.setMultiSelectionEnabled(false);
                 if (jf.showOpenDialog(punteroThis) == JFileChooser.APPROVE_OPTION) {

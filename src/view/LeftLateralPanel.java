@@ -79,10 +79,14 @@ public class LeftLateralPanel extends JPanel {
         this.aceptaTam.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
-                        vista.getGraphHeight(),
-                        Integer.parseInt(tamPuzzle.getText()),
-                        vista.getPuzzle().getImagen()));
+                if (tamPuzzle.getText().matches("[0-9]+")) {
+                    vista.cambiarPuzzle(new Puzzle(vista, vista.getGraphWidth(),
+                            vista.getGraphHeight(),
+                            Integer.parseInt(tamPuzzle.getText()),
+                            vista.getPuzzle().getImagen()));
+                }else{
+                    Notification notifica = new Notification("La entrada no es válida");
+                }
             }
         });
         this.add(aceptaTam);

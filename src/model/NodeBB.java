@@ -27,22 +27,6 @@ public class NodeBB implements Comparable<NodeBB> {
         key = null;
     }
 
-    public void setTablero(int[][] t) {
-        this.tablero = t;
-    }
-
-    public int[][] getTablero() {
-        return this.tablero;
-    }
-
-    public void setNMov(int n) {
-        this.nMov = n;
-    }
-
-    public int getnMov() {
-        return this.nMov;
-    }
-
     public int updateTotal() {
         
         //return updateTotalv1();
@@ -67,7 +51,7 @@ public class NodeBB implements Comparable<NodeBB> {
         return total;
     }
     
-     public int updateTotalv2(){
+    public int updateTotalv2(){
         total = nMov;
         good = 0;
         int index = 0;
@@ -113,14 +97,6 @@ public class NodeBB implements Comparable<NodeBB> {
         return total;
     }
     
-    public int getPoints() {
-        return total;
-    }
-    
-    public int getGood(){
-        return good;
-    }
-
     public boolean isSolved() {
         int index = 0;
         for (int i = 0; i < this.tablero.length; i++) {
@@ -136,9 +112,7 @@ public class NodeBB implements Comparable<NodeBB> {
         return true;
     }
 
-    public ArrayList<NodeBB> generateOptions() {
-        Model model = null;
-        
+    public ArrayList<NodeBB> generateOptions() {     
         ArrayList<NodeBB> list = new ArrayList<>();
         Point blank = findBlank();
 
@@ -203,7 +177,14 @@ public class NodeBB implements Comparable<NodeBB> {
         return null;
     }
 
-    public int[][] move(Movement move, int[][] t, Point b) {
+    public void move(Movement movement) {
+        Point blank = findBlank();
+        int[][] t = this.move(movement, tablero, blank);
+        this.setTablero(t);
+        this.nMov++;
+    }
+    
+    private int[][] move(Movement move, int[][] t, Point b) {
         int tablero[][] = deepCopyIntMatrix(t);
         Point blank = (Point) b.clone();
         
@@ -240,45 +221,18 @@ public class NodeBB implements Comparable<NodeBB> {
         return tablero;
     }
     
-    public void move(Movement movement) {
-        Point blank = findBlank();
-        int[][] t = this.move(movement, tablero, blank);
-        this.setTablero(t);
-        this.nMov++;
-    }
-    
-    public static int[][] deepCopyIntMatrix(int[][] input) {
-        if (input == null)
-            return null;
-        int[][] result = new int[input.length][];
-        for (int r = 0; r < input.length; r++) {
-            result[r] = input[r].clone();
-        }
-        return result;
-}
-    
-    
-    @Override
-    public int compareTo(NodeBB t) {
-        if (this.total > t.getPoints()) {
-            return 1;
-        } else if (this.total < t.getPoints()) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
 
-    public String getKey() {
-        if(this.key != null) return key;
+    // SOLVING ESQUINA
+    private Point getEsquina(int size) {
+        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
         
-        key = "";
-        for (int i = 0; i < this.tablero.length; i++) {
-            for (int j = 0; j < this.tablero.length; j++) {
-                key += ""  + (char) (65 + this.tablero[i][j]);
+        for (int i = tablero.length - size; i < tablero.length; i++) {
+            for (int j = tablero.length - size; j < tablero.length; j++) {
+                if(tablero[i][j] == index) return new Point(i,j);
             }
         }
-        return key;
+        
+        return null;
     }
 
     public void updateTotalEsquina(int size) {
@@ -317,60 +271,9 @@ public class NodeBB implements Comparable<NodeBB> {
         return tablero[tablero.length - size][tablero.length - size] == (tablero.length * piezaEsquina.x + piezaEsquina.y);
     }
 
-    public void updateTotalTop(int size) {        
-        //System.out.println("");
-        good = size;
-        
-        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
-        Point esquina = new Point(tablero.length - size, tablero.length - size);
-        
-        if(modifiedBefore(size) | tablero[esquina.x][esquina.y] != index){
-            total = -1;
-            return;
-        }
-        
-        Point blank = findBlank();
-        
-        total = 0;
-        
-        int maxIndex = tablero.length * (tablero.length - size + 1);
-        
-        for (int i = tablero.length - size; i < tablero.length; i++) {
-            for (int j = tablero.length - size; j < tablero.length; j++) {
-                if(tablero[i][j] != -1 & tablero[i][j] != index & tablero[i][j] < maxIndex){
-                                        
-                    if(total == 0){
-                        int x = blank.x - i;
-                        int y = blank.y - j;
-                    
-                        double distancia = Math.sqrt(x*x + y*y);
-                        
-                        if(distancia > 2){
-                           total += 10000 * distancia;
-                        }
-                        
-                    }
-                    
-                    int fila = tablero[i][j]/tablero.length;
-                    int columna = tablero[i][j]%tablero.length;
-                    
-                    int x = fila - i;
-                    int y = columna - j;
-                    
-                    total += Math.sqrt(x*x + y*y) * 1000;
-                    
-                                        
-                    //System.out.println("i: " + fila + "; j: " + columna);
-                    
-                    good--;
-                }
-            }
-        }
-        total += (size - good) * 100000;
-        
-    }
     
-    public void updateTotalTopV2(int size) {   
+    // SOLVING TOP ROW - 2
+    public void updateTotalTop(int size) {   
         int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
         Point esquina = new Point(tablero.length - size, tablero.length - size);
         
@@ -423,6 +326,24 @@ public class NodeBB implements Comparable<NodeBB> {
 
     }
     
+    private boolean modifiedTop(int size) {
+        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
+        int i = tablero.length - size;
+        
+        for (int j = tablero.length - size; j < tablero.length; j++) {
+            if(tablero[i][j] != index) return true;
+            index++;
+        }
+        
+        return false;
+    }
+
+    public boolean isSolvedTop(int size) {
+        return !modifiedTop(size);
+    }
+
+    
+    // SOLVING LAST 2 SQUARES OF TOP ROW
     public void updateTotalTopEsquina(int size) {
          int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
         Point esquina = new Point(tablero.length - size, tablero.length - size);
@@ -514,6 +435,20 @@ public class NodeBB implements Comparable<NodeBB> {
         this.move(Movement.DOWN);
     }
 
+    public boolean isSolvedTopRow(int size) {
+        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
+        int i = tablero.length - size;
+        
+        for (int j = tablero.length - size; j < tablero.length - 2; j++) {
+            if(tablero[i][j] != index) return false;
+            index++;
+        }
+        
+        return true;
+    }    
+    
+
+    // SOLVING COLUMN - 2
     public void updateTotalLeft(int size) {
         if(modifiedBefore(size) | modifiedTop(size)){
             total = -1;
@@ -564,7 +499,21 @@ public class NodeBB implements Comparable<NodeBB> {
         } 
         
     }
-
+    
+    public boolean isSolvedLeftColumn(int size) {
+        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
+        int j = tablero.length - size;
+        
+        for (int i = tablero.length - size; i < tablero.length - 2; i++) {
+            if(tablero[i][j] != index) return false;
+            index += tablero.length;
+        }
+        
+        return true;
+    }
+    
+    
+    // SOLVING LAST 2 SQUARES OF LEFT COLUMN
     public void updateTotalLeftEsquina(int size) {
         int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
         Point esquina = new Point(tablero.length - size, tablero.length - size);
@@ -654,19 +603,19 @@ public class NodeBB implements Comparable<NodeBB> {
         this.move(Movement.RIGHT);
     }
     
-    
-    private Point getEsquina(int size) {
+    public boolean isSolvedLeft(int size) {
         int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
+        int j = tablero.length - size;
         
         for (int i = tablero.length - size; i < tablero.length; i++) {
-            for (int j = tablero.length - size; j < tablero.length; j++) {
-                if(tablero[i][j] == index) return new Point(i,j);
-            }
+            if(tablero[i][j] != index) return false;
+            index += tablero.length;
         }
         
-        return null;
-    }
+        return true;    }
 
+    
+    // CHECKS IF THE ROW AND COLUMN FROM BEFORE HAS BEEN MODIFIED
     private boolean modifiedBefore(int size){
         if(size == tablero.length) return false;
 
@@ -688,38 +637,9 @@ public class NodeBB implements Comparable<NodeBB> {
 
         return false;
     }
-    
-    
 
-    public boolean isSolvedTop(int size) {
-        return !modifiedTop(size);
-    }
     
-    private boolean modifiedTop(int size) {
-        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
-        int i = tablero.length - size;
-        
-        for (int j = tablero.length - size; j < tablero.length; j++) {
-            if(tablero[i][j] != index) return true;
-            index++;
-        }
-        
-        return false;
-    }
-    public boolean isSolvedTopRow(int size) {
-        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
-        int i = tablero.length - size;
-        
-        for (int j = tablero.length - size; j < tablero.length - 2; j++) {
-            if(tablero[i][j] != index) return false;
-            index++;
-        }
-        
-        return true;
-    }
-    
-    
-
+    // SEARCHS A PIECE IN A SUB-PUZZLE
     private Point findPieza(int size, int index) {
         for (int i = tablero.length - size; i < tablero.length; i++) {
             for (int j = tablero.length - size; j < tablero.length; j++) {
@@ -730,33 +650,65 @@ public class NodeBB implements Comparable<NodeBB> {
         return null;
     }
 
-    public boolean isSolvedLeftColumn(int size) {
-        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
-        int j = tablero.length - size;
-        
-        for (int i = tablero.length - size; i < tablero.length - 2; i++) {
-            if(tablero[i][j] != index) return false;
-            index += tablero.length;
+    
+    //GENERALES
+    public static int[][] deepCopyIntMatrix(int[][] input) {
+        if (input == null)
+            return null;
+        int[][] result = new int[input.length][];
+        for (int r = 0; r < input.length; r++) {
+            result[r] = input[r].clone();
         }
+        return result;
+}
+
+    public String getKey() {
+        if(this.key != null) return key;
         
-        return true;
+        key = "";
+        for (int i = 0; i < this.tablero.length; i++) {
+            for (int j = 0; j < this.tablero.length; j++) {
+                key += ""  + (char) (65 + this.tablero[i][j]);
+            }
+        }
+        return key;
     }
     
-    public boolean isSolvedLeft(int size) {
-        int index = tablero.length *  (tablero.length - size) + (tablero.length - size);
-        int j = tablero.length - size;
-        
-        for (int i = tablero.length - size; i < tablero.length; i++) {
-            if(tablero[i][j] != index) return false;
-            index += tablero.length;
+    @Override
+    public int compareTo(NodeBB t) {
+        if (this.total > t.getPoints()) {
+            return 1;
+        } else if (this.total < t.getPoints()) {
+            return -1;
+        } else {
+            return 0;
         }
-        
-        return true;    }
+    }
 
     
+    // GETTERS AND SETTERS
+    public void setTablero(int[][] t) {
+        this.tablero = t;
+    }
 
-    
+    public int[][] getTablero() {
+        return this.tablero;
+    }
 
+    public void setNMov(int n) {
+        this.nMov = n;
+    }
+
+    public int getnMov() {
+        return this.nMov;
+    }
     
+    public int getPoints() {
+        return total;
+    }
+    
+    public int getGood(){
+        return good;
+    }
 
 }

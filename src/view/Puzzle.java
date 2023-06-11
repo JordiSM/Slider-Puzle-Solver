@@ -121,6 +121,11 @@ public final class Puzzle extends JPanel {
                     int fila = indice / tamPuzzle;
                     int columna = indice % tamPuzzle;
                     g2d.drawImage(puzzle[fila][columna], x, y, cuadrilateroWidthP, cuadrilateroHeightP, null);
+                } else {
+                    int fila = indice / tamPuzzle;
+                    int columna = indice % tamPuzzle;
+                    g2d.setColor(Color.WHITE);
+                    g2d.fillRect(x, y, cuadrilateroWidthP, cuadrilateroHeightP);
                 }
             }
         }

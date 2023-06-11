@@ -62,7 +62,7 @@ public class Model {
         Random rnd = new Random();
         System.out.println("Tamaño Tablero = " + tamañoTablero);
         Movement moveBefore = Movement.UP;
-        for(int i = 0; i < 500; ){
+        for(int i = 0; i < 5000; ){
             Movement move = this.getRandomMove();
             if(this.isValidMove(move) & !Movement.isInverse(move, moveBefore)){
                 this.move(move);
